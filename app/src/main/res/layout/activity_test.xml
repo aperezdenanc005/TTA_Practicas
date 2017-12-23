@@ -8,9 +8,9 @@
     tools:context="eus.ehu.ane.tta.ejemplo.presentacion.TestActivity">
 
     <TextView
+        android:id="@+id/pregunta_test"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""/>
+        android:layout_height="wrap_content" />
 
     <RadioGroup
         android:id="@+id/test_choices"

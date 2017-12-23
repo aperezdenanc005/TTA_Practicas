@@ -5,36 +5,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="eus.ehu.ane.tta.ejemplo.presentacion.MenuActivity">
+    tools:context="eus.ehu.ane.tta.ejemplo.presentacion.ExerciseActivity">
 
     <TextView
-        android:id="@+id/menu_login"
+        android:id="@+id/exercise_wording"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:gravity="center"/>
-
-    <TextView
-        android:id="@+id/menu_leccion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"/>
+        android:layout_height="wrap_content" />
 
     <Button
+        android:id="@+id/button_send_file"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/nuevo_test"
-        />
+        android:text="@string/subir_fichero"/>
 
     <Button
+        android:id="@+id/button_sacar_foto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/nuevo_ejercicio"
-        />
+        android:text="@string/sacar_foto"/>
 
     <Button
+        android:id="@+id/button_grabar_audio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/seguimiento"
-        />
+        android:text="@string/grabar_audio"/>
+
+    <Button
+        android:id="@+id/button_grabar_video"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/grabar_video"/>
 </LinearLayout>

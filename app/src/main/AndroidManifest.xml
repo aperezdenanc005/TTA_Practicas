@@ -24,7 +24,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentacion.MenuActivity" />
-        <activity android:name=".presentacion.TestActivity"></activity>
+        <activity android:name=".presentacion.TestActivity" />
+        <activity android:name=".presentacion.ExerciseActivity"></activity>
     </application>
 
 </manifest>

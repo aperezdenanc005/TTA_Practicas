@@ -14,4 +14,17 @@
         completions."
     </string>
     <string name="button_send">ENVIAR</string>
+    <string name="button_acceder">ACCEDER</string>
+    <string name="passwd_edit">Contraseña</string>
+    <string name="usuario_edit">Usuario</string>
+    <string name="title_activity_exercise">ExerciseActivity</string>
+
+    <string name="subir_fichero">SUBIR FICHERO</string>
+    <string name="sacar_foto">SACAR FOTO</string>
+    <string name="grabar_audio">GRABAR AUDIO</string>
+    <string name="grabar_video">GRABAR VIDEO</string>
+
+    <string name="nuevo_test">NUEVO TEST</string>
+    <string name="nuevo_ejercicio">NUEVO EJERCICIO</string>
+    <string name="seguimiento">SEGUIMIENTO</string>
 </resources>
