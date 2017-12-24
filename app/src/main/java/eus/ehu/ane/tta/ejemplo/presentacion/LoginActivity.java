@@ -36,10 +36,16 @@ import eus.ehu.ane.tta.ejemplo.R;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
+import android.content.Intent;
+import android.widget.Toast;
+
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
+
+    public final static String EXTRA_LOGIN = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +53,25 @@ public class LoginActivity extends AppCompatActivity {
         // Set up the login form.
     }
 
+    public void login(View view)
+    {
+        //Intent al que le pasamos el contexto (La acticidad actual) y la actividad a la que queremos ir
+        Intent intent= new Intent(this,MenuActivity.class);
+        //Obtenemos el login y el password introducidos por el usuario
+        String login =((EditText)findViewById(R.id.login)).getText().toString();
+        String passwd =((EditText)findViewById(R.id.passwd)).getText().toString();
+        //Comprobamos que no esten vacion los campos
+        if(login.matches("") || passwd.matches(""))
+        {
+            Toast.makeText(this,R.string.login_incorrecto,Toast.LENGTH_LONG).show();
+        }else
+        {
+            //Se le envia a la actividad que vamos a lanzar el login introducido por el usuario
+            intent.putExtra(LoginActivity.EXTRA_LOGIN,login);
+            Toast.makeText(this,R.string.login_correcto,Toast.LENGTH_SHORT).show();
+            startActivity(intent);
+        }
+    }
 
 }
 

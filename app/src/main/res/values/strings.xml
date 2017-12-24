@@ -27,4 +27,7 @@
     <string name="nuevo_test">NUEVO TEST</string>
     <string name="nuevo_ejercicio">NUEVO EJERCICIO</string>
     <string name="seguimiento">SEGUIMIENTO</string>
+
+    <string name="login_incorrecto">Login incorrecto! Vuela a intentarlo</string>
+    <string name="login_correcto">Login correcto!</string>
 </resources>
