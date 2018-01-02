@@ -29,7 +29,6 @@ public class TestActivity extends AppCompatActivity {
     String pregunta="¿Cuál de las siguientes opciones NO se indica en el fichero de manifiesto?";
     String[] respuestas={"Versión de la aplicación","Listado de componentes de la aplicación","Opciones del menu de ajustes","Nivel mínimo de la API Android requerida","Nombre del paquete java de la aplicación"};
     String adviseHTML="<html><body>The manifest describes the <b>componentes of the applicaction:</b> the activities, services, broadcast receivers and content providers that ...</body></html>";
-    String[] mime={"URL","text/html","video","audio"};
     String URLaudioVideo="http://u017633.ehu.eus:28080/static/ServidorTta/AndroidManifest.mp4";
 
     @Override
