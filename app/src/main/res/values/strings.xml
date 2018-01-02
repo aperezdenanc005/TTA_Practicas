@@ -33,4 +33,7 @@
     <string name="login_correcto">Login correcto!</string>
     <string name="test_opcion_erronea">¡Has fallado!</string>
     <string name="test_opcion_correcta">Correcto</string>
+    <string name="no_camera">No dispones de camara en el dispositivo</string>
+    <string name="no_app">No dispones de la aplicación necesaria</string>
+    <string name="no_micro">No dispones de micrófono en el dispositivo</string>
 </resources>
