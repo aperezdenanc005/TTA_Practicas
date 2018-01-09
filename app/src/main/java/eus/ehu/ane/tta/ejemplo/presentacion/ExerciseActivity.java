@@ -3,6 +3,7 @@ package eus.ehu.ane.tta.ejemplo.presentacion;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -10,28 +11,74 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import eus.ehu.ane.tta.ejemplo.R;
+import eus.ehu.ane.tta.ejemplo.modelo.Exercise;
+import eus.ehu.ane.tta.ejemplo.modelo.RestClient;
+
 import android.view.View;
 import android.content.Intent;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 
 public class ExerciseActivity extends AppCompatActivity {
 
-    String preguntaEjercicio="Explica cómo aplicarías el patrón de diseño MVP en el desarrollo de una app para Android";
+    //String preguntaEjercicio="Explica cómo aplicarías el patrón de diseño MVP en el desarrollo de una app para Android";
     private final static int READ_REQUEST_CODE=0;
     private final static int PICTURE_REQUEST_CODE=1;
     private final static int AUDIO_REQUEST_CODE=2;
     private final static int VIDEO_REQUEST_CODE=3;
     private Uri pictureUri;
+    String dni;
+    String passwd;
+
+    RestClient restClient=new RestClient("http://u017633.ehu.eus:28080/ServidorTta/rest/tta");
+    int id=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
 
-        TextView pregunta=(TextView)findViewById(R.id.exercise_wording);
-        pregunta.setText(preguntaEjercicio);
+        Intent intent=getIntent();
+        dni=intent.getStringExtra(MenuActivity.EXTRA_DNI);
+        passwd=intent.getStringExtra(MenuActivity.EXTRA_PASSWD);
+        //TextView pregunta=(TextView)findViewById(R.id.exercise_wording);
+        //pregunta.setText(preguntaEjercicio);
+
+        new AsyncTask<Void,Void,Void>()
+        {
+            private Exercise exercise;
+            @Override
+            protected Void doInBackground(Void... voids)
+            {
+                try{
+                    restClient.setHttpBasicAuth(dni,passwd);
+                    JSONObject json=restClient.getJson(String.format("getExercise?id=%s",id));
+                    exercise=new Exercise();
+                    exercise.setWording(json.getString("wording"));
+                    //JSONObject lessonObject=json.getJSONObject("lessonBean");
+                    //exercise.getLessonBean().setNumber(lessonObject.getInt("number"));
+                    //exercise.getLessonBean().setTitle(lessonObject.getString("title"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid)
+            {
+                View view;
+                TextView ejercicioEnunciado=findViewById(R.id.exercise_wording);
+                ejercicioEnunciado.setText(exercise.getWording());
+            }
+        }.execute();
     }
 
     public void subirFichero(View view)

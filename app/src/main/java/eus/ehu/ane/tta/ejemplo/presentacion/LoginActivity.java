@@ -29,22 +29,33 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import eus.ehu.ane.tta.ejemplo.R;
+import eus.ehu.ane.tta.ejemplo.modelo.RestClient;
+import eus.ehu.ane.tta.ejemplo.modelo.User;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 import android.content.Intent;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
 
-    public final static String EXTRA_LOGIN = "";
+    public final static String EXTRA_LOGIN = "login";
+    public final static String EXTRA_LESSON_TITLE="title";
+    public final static String EXTRA_DNI = "dni";
+    public final static String EXTRA_PASSWD="passwd";
+    public final static String EXTRA_LESSON_NUMBER="number";
+    RestClient restClient=new RestClient("http://u017633.ehu.eus:28080/ServidorTta/rest/tta");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +64,10 @@ public class LoginActivity extends AppCompatActivity {
         // Set up the login form.
     }
 
+    /*
     public void login(View view)
     {
+
         //Intent al que le pasamos el contexto (La acticidad actual) y la actividad a la que queremos ir
         Intent intent= new Intent(this,MenuActivity.class);
         //Obtenemos el login y el password introducidos por el usuario
@@ -71,7 +84,43 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this,R.string.login_correcto,Toast.LENGTH_SHORT).show();
             startActivity(intent);
         }
-    }
+    }*/
 
+    public void autenticacion(View view) throws IOException
+    {
+        final String dni =((EditText)findViewById(R.id.login)).getText().toString();
+        final String passwd =((EditText)findViewById(R.id.passwd)).getText().toString();
+        new AsyncTask<Void,Void,Void>()
+        {
+            private User user;
+            @Override
+            protected Void doInBackground(Void... voids)
+            {
+                try{
+                    restClient.setHttpBasicAuth(dni,passwd);
+                    JSONObject json=restClient.getJson(String.format("getStatus?dni=%s",dni));
+                    user=new User(json.getInt("id"),json.getString("user"),json.getInt("lessonNumber"),json.getString("lessonTitle"),json.getInt("nextTest"),json.getInt("nextExercise"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid)
+            {
+                Intent intent= new Intent(getApplicationContext(),MenuActivity.class);
+                intent.putExtra(LoginActivity.EXTRA_LOGIN,user.getUser());
+                intent.putExtra(LoginActivity.EXTRA_LESSON_TITLE,user.getLessonTitle());
+                int i=user.getLessonNumber();
+                intent.putExtra(LoginActivity.EXTRA_LESSON_NUMBER,Integer.toString(i));
+                intent.putExtra(LoginActivity.EXTRA_DNI, dni);
+                intent.putExtra(LoginActivity.EXTRA_PASSWD, passwd);
+                startActivity(intent);
+            }
+        }.execute();
+    }
 }
 

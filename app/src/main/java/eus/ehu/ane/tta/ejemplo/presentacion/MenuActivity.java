@@ -10,6 +10,10 @@ import android.widget.TextView;
 import android.view.View;
 
 public class MenuActivity extends AppCompatActivity {
+    public final static String EXTRA_DNI = "dni";
+    public final static String EXTRA_PASSWD="passwd";
+    String dni;
+    String passwd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,21 +22,29 @@ public class MenuActivity extends AppCompatActivity {
 
         //Obtengo el login del intent que ha lanzado mi actividad
         Intent intent=getIntent();
+        dni=intent.getStringExtra(LoginActivity.EXTRA_DNI);
+        passwd=intent.getStringExtra(LoginActivity.EXTRA_PASSWD);
         //Obtengo donde quiero visualizarlo en mi actividad
         TextView textLogin=(TextView)findViewById(R.id.menu_login);
+        TextView textLeccion=(TextView)findViewById(R.id.menu_leccion);
         //Visualizo el login obtenido mediante el intent que se guarda en la variable declarada en la LoginActivity
         textLogin.setText("Bienvenid@ "+intent.getStringExtra(LoginActivity.EXTRA_LOGIN));
+        textLeccion.setText("Lección "+intent.getStringExtra(LoginActivity.EXTRA_LESSON_NUMBER)+": "+intent.getStringExtra(LoginActivity.EXTRA_LESSON_TITLE));
     }
 
     public void test(View view)
     {
         Intent intent = new Intent(this,TestActivity.class);
+        intent.putExtra(MenuActivity.EXTRA_DNI, dni);
+        intent.putExtra(MenuActivity.EXTRA_PASSWD, passwd);
         startActivity(intent);
     }
 
     public void ejercicio(View view)
     {
         Intent intent=new Intent(this,ExerciseActivity.class);
+        intent.putExtra(MenuActivity.EXTRA_DNI, dni);
+        intent.putExtra(MenuActivity.EXTRA_PASSWD, passwd);
         startActivity(intent);
     }
 }

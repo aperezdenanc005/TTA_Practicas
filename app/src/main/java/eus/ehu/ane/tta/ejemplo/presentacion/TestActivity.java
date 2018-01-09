@@ -1,6 +1,7 @@
 package eus.ehu.ane.tta.ejemplo.presentacion;
 
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 import android.webkit.WebView;
 
 import eus.ehu.ane.tta.ejemplo.R;
+import eus.ehu.ane.tta.ejemplo.modelo.Test;
+import eus.ehu.ane.tta.ejemplo.modelo.RestClient;
 
 import static eus.ehu.ane.tta.ejemplo.R.id.alertTitle;
 import static eus.ehu.ane.tta.ejemplo.R.id.button_send_help;
@@ -21,6 +24,9 @@ import static eus.ehu.ane.tta.ejemplo.R.id.button_send_test;
 import android.net.Uri;
 import android.content.Intent;
 import android.widget.VideoView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -30,6 +36,11 @@ public class TestActivity extends AppCompatActivity {
     String[] respuestas={"Versión de la aplicación","Listado de componentes de la aplicación","Opciones del menu de ajustes","Nivel mínimo de la API Android requerida","Nombre del paquete java de la aplicación"};
     String adviseHTML="<html><body>The manifest describes the <b>componentes of the applicaction:</b> the activities, services, broadcast receivers and content providers that ...</body></html>";
     String URLaudioVideo="http://u017633.ehu.eus:28080/static/ServidorTta/AndroidManifest.mp4";
+    String dni;
+    String passwd;
+    int id=1;
+
+    RestClient restClient=new RestClient("http://u017633.ehu.eus:28080/ServidorTta/rest/tta");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +48,42 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test);
 
         RadioGroup group=(RadioGroup)findViewById(R.id.test_choices);
-        TextView pregunta_texto=(TextView)findViewById(R.id.pregunta_test);
+        //TextView pregunta_texto=(TextView)findViewById(R.id.pregunta_test);
+
+        Intent intent=getIntent();
+        dni=intent.getStringExtra(MenuActivity.EXTRA_DNI);
+        passwd=intent.getStringExtra(MenuActivity.EXTRA_PASSWD);
         //Poner el titulo de la pregunta en el test
-        pregunta_texto.setText(pregunta);
+        //pregunta_texto.setText(pregunta);
+
+        new AsyncTask<Void,Void,Void>()
+        {
+            private Test test;
+            @Override
+            protected Void doInBackground(Void... voids)
+            {
+                try{
+                    restClient.setHttpBasicAuth(dni,passwd);
+                    JSONObject json=restClient.getJson(String.format("getTest?id=%s",id));
+                    test=new Test();
+                    test.setWording(json.getString("wording"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid)
+            {
+                View view;
+                TextView pregunta_texto=(TextView)findViewById(R.id.pregunta_test);
+                pregunta_texto.setText(test.getWording());
+            }
+        }.execute();
+
         int i;
         for(i=0;i<respuestas.length;i++)
         {
