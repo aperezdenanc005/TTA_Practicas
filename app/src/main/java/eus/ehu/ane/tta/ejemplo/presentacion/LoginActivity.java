@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     public final static String EXTRA_LESSON_TITLE="title";
     public final static String EXTRA_DNI = "dni";
     public final static String EXTRA_PASSWD="passwd";
+    public final static String EXTRA_USER_ID="id";
     public final static String EXTRA_LESSON_NUMBER="number";
     RestClient restClient=new RestClient("http://u017633.ehu.eus:28080/ServidorTta/rest/tta");
 
@@ -118,6 +119,8 @@ public class LoginActivity extends AppCompatActivity {
                 intent.putExtra(LoginActivity.EXTRA_LESSON_NUMBER,Integer.toString(i));
                 intent.putExtra(LoginActivity.EXTRA_DNI, dni);
                 intent.putExtra(LoginActivity.EXTRA_PASSWD, passwd);
+                int id=user.getId();
+                intent.putExtra(LoginActivity.EXTRA_USER_ID,Integer.toString(id));
                 startActivity(intent);
             }
         }.execute();

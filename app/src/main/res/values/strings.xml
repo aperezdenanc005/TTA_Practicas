@@ -36,4 +36,6 @@
     <string name="no_camera">No dispones de camara en el dispositivo</string>
     <string name="no_app">No dispones de la aplicación necesaria</string>
     <string name="no_micro">No dispones de micrófono en el dispositivo</string>
+    <string name="fichero_subido">El fichero se ha subido correctamente</string>
+    <string name="resultado_enviado">El resultado se ha subido correctamente</string>
 </resources>

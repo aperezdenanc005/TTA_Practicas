@@ -6,9 +6,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.util.Log;
+import android.database.Cursor;
 
 import eus.ehu.ane.tta.ejemplo.R;
 import eus.ehu.ane.tta.ejemplo.modelo.Exercise;
@@ -23,6 +26,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class ExerciseActivity extends AppCompatActivity {
 
@@ -31,9 +35,12 @@ public class ExerciseActivity extends AppCompatActivity {
     private final static int PICTURE_REQUEST_CODE=1;
     private final static int AUDIO_REQUEST_CODE=2;
     private final static int VIDEO_REQUEST_CODE=3;
+    private final static String TAG="tag";
     private Uri pictureUri;
     String dni;
     String passwd;
+    String fileName;
+    String path;
 
     RestClient restClient=new RestClient("http://u017633.ehu.eus:28080/ServidorTta/rest/tta");
     int id=1;
@@ -165,9 +172,15 @@ public class ExerciseActivity extends AppCompatActivity {
         }
         else
         {
-            switch(resultCode)
+            switch(requestCode)
             {
                 case READ_REQUEST_CODE:
+                    Uri uri = data.getData();
+                    //Log.i(TAG, "Uri: " + uri.toString());
+                    fileName=consultaMetadatos(uri);
+                    path=data.getData().getPath();
+                    //Toast.makeText(this, path,Toast.LENGTH_LONG).show();
+                    uploadFile(fileName,uri,path);
                     break;
                 case PICTURE_REQUEST_CODE:
                     //subirFichero(pictureUri);
@@ -178,5 +191,54 @@ public class ExerciseActivity extends AppCompatActivity {
                     break;
             }
         }
+    }
+
+    public String consultaMetadatos(Uri uri)
+    {
+        Cursor cursor=getContentResolver().query(uri,null,null,null,null,null);
+        String displayName ="";
+        try
+        {
+            if(cursor!=null && cursor.moveToFirst())
+            {
+                displayName=cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                Log.i(TAG,"Display Name: "+displayName);
+
+                int sizeIndex=cursor.getColumnIndex(OpenableColumns.SIZE);
+                String size=null;
+                if(!cursor.isNull(sizeIndex))
+                    size=cursor.getString(sizeIndex);
+                else
+                    size="Unknown";
+                Log.i(TAG,"Size: "+size);
+            }
+        }finally {
+            cursor.close();
+        }
+        return displayName;
+    }
+    public void uploadFile(final String fileName, final Uri uri, final String path)
+    {
+        new AsyncTask<Void,Void,Void>()
+        {
+            @Override
+            protected Void doInBackground(Void... voids)
+            {
+                try{
+                    restClient.setHttpBasicAuth(dni,passwd);
+                    InputStream inputStream=getContentResolver().openInputStream(uri);
+                    restClient.postFile(path,inputStream,fileName);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid)
+            {
+                Toast.makeText(getApplicationContext(), R.string.fichero_subido,Toast.LENGTH_LONG).show();
+            }
+        }.execute();
     }
 }
