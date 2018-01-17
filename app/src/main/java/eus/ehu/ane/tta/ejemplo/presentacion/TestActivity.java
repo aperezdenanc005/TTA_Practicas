@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 
 public class TestActivity extends AppCompatActivity {
 
@@ -45,6 +46,7 @@ public class TestActivity extends AppCompatActivity {
     int id=1;
     Test test;
     int selected;
+    int resultadoGuardarSeleccion;
 
     RestClient restClient=new RestClient("http://u017633.ehu.eus:28080/ServidorTta/rest/tta");
 
@@ -83,16 +85,6 @@ public class TestActivity extends AppCompatActivity {
                         choice.setAnswer(item.getString("answer"));
                         choice.setCorrect(item.getBoolean("correct"));
                         choice.setAdvise(item.getString("advise"));
-                        //choice.setMime(item.optString("mime",null));
-                        /*JSONObject objetoResourceType=item.getJSONObject("resourceType");
-                        if(objetoResourceType.getString("mime").matches("null"))
-                        {
-                            choice.setMime("null");
-                        }
-                        else
-                        {
-                            choice.setMime(objetoResourceType.getString("mime"));
-                        }*/
                         if(item.getString("resourceType").matches("null"))
                         {
                             choice.setMime("null");
@@ -206,12 +198,14 @@ public class TestActivity extends AppCompatActivity {
                     JSONObject json=new JSONObject();
                     json.put("userId",userID);
                     json.put("choiceId",test.getChoices().get(selected).getId());
-                    restClient.postJSON(json,"postChoice");
+                    resultadoGuardarSeleccion=restClient.postJSON(json,"postChoice");
+                    //resultadoGuardarSeleccion= 204 - No content - La petición se ha completado con éxito pero su respuesta no tiene ningún contenido
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                //int visualizar=resultadoGuardarSeleccion;
                 return null;
             }
 

@@ -39,8 +39,11 @@ public class ExerciseActivity extends AppCompatActivity {
     private Uri pictureUri;
     String dni;
     String passwd;
+    String idUsuario;
     String fileName;
     String path;
+    int resultadoGuardarFichero;
+    String visualizar;
 
     RestClient restClient=new RestClient("http://u017633.ehu.eus:28080/ServidorTta/rest/tta");
     int id=1;
@@ -53,6 +56,7 @@ public class ExerciseActivity extends AppCompatActivity {
         Intent intent=getIntent();
         dni=intent.getStringExtra(MenuActivity.EXTRA_DNI);
         passwd=intent.getStringExtra(MenuActivity.EXTRA_PASSWD);
+        idUsuario=intent.getStringExtra(MenuActivity.EXTRA_USER_ID);
         //TextView pregunta=(TextView)findViewById(R.id.exercise_wording);
         //pregunta.setText(preguntaEjercicio);
 
@@ -227,10 +231,13 @@ public class ExerciseActivity extends AppCompatActivity {
                 try{
                     restClient.setHttpBasicAuth(dni,passwd);
                     InputStream inputStream=getContentResolver().openInputStream(uri);
-                    restClient.postFile(path,inputStream,fileName);
+                    //visualizar=String.format("postExercise?user=%s",idUsuario+"&id=1");
+                    resultadoGuardarFichero=restClient.postFile(String.format("postExercise?user=%s",idUsuario+"&id=1"),inputStream,fileName);
+                    //resultadoGuardarFichero=restClient.postFile(path,inputStream,fileName);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                //int visualizar=resultadoGuardarFichero;
                 return null;
             }
 

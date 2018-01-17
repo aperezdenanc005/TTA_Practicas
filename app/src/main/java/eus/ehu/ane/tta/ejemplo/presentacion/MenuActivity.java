@@ -49,6 +49,7 @@ public class MenuActivity extends AppCompatActivity {
         Intent intent=new Intent(this,ExerciseActivity.class);
         intent.putExtra(MenuActivity.EXTRA_DNI, dni);
         intent.putExtra(MenuActivity.EXTRA_PASSWD, passwd);
+        intent.putExtra(MenuActivity.EXTRA_USER_ID, id);
         startActivity(intent);
     }
 }

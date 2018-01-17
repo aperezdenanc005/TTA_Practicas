@@ -38,4 +38,5 @@
     <string name="no_micro">No dispones de micrófono en el dispositivo</string>
     <string name="fichero_subido">El fichero se ha subido correctamente</string>
     <string name="resultado_enviado">El resultado se ha subido correctamente</string>
+    <string name="campos">Hay que rellenar todos los campos!!!!</string>
 </resources>
